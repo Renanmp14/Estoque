@@ -9,11 +9,12 @@ public class ItensCSVADM {
     //Caminho do arquivo
     private static String Arquivo = "./dados/Itens.csv";
     private static Itens itens = new Itens();
-    static Scanner lerInt = new Scanner(System.in);
-    static Scanner lerString = new Scanner(System.in);
+
+    Scanner lerInt = new Scanner(System.in);
+    Scanner lerString = new Scanner(System.in);
 
     //Escrever em um arquivo com parametros no Main
-    /*
+
     public static void AdicionaItens (Itens it){
         try{
             //Verificar a existencia do arquivo
@@ -26,7 +27,7 @@ public class ItensCSVADM {
             }
 
             //Escrever o produto na tabela
-            escreve.write(it.getCodigo()+";"+it.getCategoria()+";"+it.getProduto()+";"+it.getValor()+";"+it.getQuantdade()+"\n");
+            escreve.write(it.getCodigo()+";"+it.getCategoria()+";"+it.getProduto()+";"+it.getValor()+";"+it.getQuantdade()+";"+it.getQuantidadeMinima()+"\n");
 
             //Escreve o flush
             escreve.flush();
@@ -39,9 +40,9 @@ public class ItensCSVADM {
         }
 
     }
-    */
 
-    public static void AdicionaItensSolicitados (){
+
+    /*public boolean AdicionaItensSolicitados (){
         try{
             //Verificar a existencia do arquivo
             boolean arquivoExiste = new File(Arquivo).exists();
@@ -53,6 +54,7 @@ public class ItensCSVADM {
             }
             System.out.println("Informe o Código: ");
             itens.setCodigo(lerInt.nextInt());
+
             System.out.println("Informe a Categoria: ");
             itens.setCategoria(lerInt.nextInt());
             System.out.println("Informe o Produto: ");
@@ -75,8 +77,8 @@ public class ItensCSVADM {
         }catch (IOException e){
             e.printStackTrace();
         }
-
-    }
+        return true;
+    }*/
 
     public static Itens getItens() {
         return itens;

@@ -73,9 +73,9 @@ public class Itens {
     public String toString() {
         return  " \n" + "Codigo: " + codigo +
                 ", Categoria: " + categoria +
-                ", nome do Produto: " + nomeProduto + '\'' +
+                ", nome do Produto: " + nomeProduto +
                 ", valor R$ " + valor +
                 ", Quantidade: " + quantidade +
-                ", Quantidade Minima:" + quantidadeMinima;
+                ", Quantidade Minima:" + quantidadeMinima + "\n";
     }
 }

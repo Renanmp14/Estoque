@@ -14,7 +14,7 @@ public class ItensCSV {
     ArrayList<Itens> estoque = new ArrayList<>();
 
     //Add Item
-    public boolean AdicionaItensSolicitados (){
+    public boolean adicionaItensSolicitados (){
         try{
             //Verificar a existencia do arquivo
             boolean arquivoExiste = new File(Arquivo).exists();

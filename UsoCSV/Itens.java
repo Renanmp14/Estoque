@@ -12,8 +12,6 @@ public class Itens {
     }
 
     // Método construtor
-
-
     public Itens(int codigo, Categoria categoria, String produto, double valor, int quantidade, int quantidadeMinima) {
         this.codigo = codigo;
         this.categoria = categoria;

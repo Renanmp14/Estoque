@@ -23,11 +23,11 @@ public class ItensCSVADM {
             //Abrir o escritor do arquivo e validar se existe
             FileWriter escreve = new FileWriter(Arquivo, StandardCharsets.ISO_8859_1,true);
             if (!arquivoExiste){
-                escreve.write("Código;Categoria;Produto;Valor;Quantidade\n");
+                escreve.write("Codigo;Categoria;Produto;Valor;Quantidade;QuantidadeMinima\n");
             }
 
             //Escrever o produto na tabela
-            escreve.write(it.getCodigo()+";"+it.getCategoria()+";"+it.getProduto()+";"+it.getValor()+";"+it.getQuantdade()+";"+it.getQuantidadeMinima()+"\n");
+            escreve.write(it.getCodigo()+";"+it.getCategoria()+";"+it.getNomeProduto()+";"+it.getValor()+";"+it.getQuantidade()+";"+it.getQuantidadeMinima()+"\n");
 
             //Escreve o flush
             escreve.flush();

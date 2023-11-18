@@ -2,9 +2,9 @@ public class Itens {
 
     private int codigo;
     private Categoria categoria;
-    private String produto;
+    private String nomeProduto;
     private double valor;
-    private int quantdade;
+    private int quantidade;
     private int quantidadeMinima;
 
     public Itens (){
@@ -14,21 +14,21 @@ public class Itens {
     // Método construtor
 
 
-    public Itens(int codigo, Categoria categoria, String produto, double valor, int quantdade, int quantidadeMinima) {
+    public Itens(int codigo, Categoria categoria, String produto, double valor, int quantidade, int quantidadeMinima) {
         this.codigo = codigo;
         this.categoria = categoria;
-        this.produto = produto;
+        this.nomeProduto = produto;
         this.valor = valor;
-        this.quantdade = quantdade;
+        this.quantidade = quantidade;
         this.quantidadeMinima = quantidadeMinima;
     }
 
-    public String getProduto() {
-        return produto;
+    public String getNomeProduto() {
+        return nomeProduto;
     }
 
-    public void setProduto(String produto) {
-        this.produto = produto;
+    public void setNomeProduto(String nomeProduto) {
+        this.nomeProduto = nomeProduto;
     }
 
     public double getValor() {
@@ -39,12 +39,12 @@ public class Itens {
         this.valor = valor;
     }
 
-    public int getQuantdade() {
-        return quantdade;
+    public int getQuantidade() {
+        return quantidade;
     }
 
-    public void setQuantdade(int quantdade) {
-        this.quantdade = quantdade;
+    public void setQuantidade(int quantidade) {
+        this.quantidade = quantidade;
     }
 
     public int getCodigo() {
@@ -69,5 +69,15 @@ public class Itens {
 
     public int getQuantidadeMinima() {
         return quantidadeMinima;
+    }
+
+    @Override
+    public String toString() {
+        return  " \n" + "Codigo: " + codigo +
+                ", Categoria: " + categoria +
+                ", nome do Produto: " + nomeProduto + '\'' +
+                ", valor R$ " + valor +
+                ", Quantidade: " + quantidade +
+                ", Quantidade Minima:" + quantidadeMinima;
     }
 }

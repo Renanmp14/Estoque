@@ -25,7 +25,28 @@ public class ItensCSV {
                 escreve.write("Codigo;Categoria;Produto;Valor;Quantidade;QuantidadeMinima\n");
             }
             System.out.println("Informe o Código: ");
-            itens.setCodigo(lerInt.nextInt());
+            int codigo = lerInt.nextInt();
+            boolean codigoNovo = false;
+
+            //verifica se produto está no catálogo
+            while (!codigoNovo) {
+                Itens item = new Itens();
+
+                for (Itens estoqueItem : estoque) {
+                    if (estoqueItem.getCodigo() == codigo) {
+                        System.out.println("Informe a quantidade a adicionar do produto " + estoqueItem.getNomeProduto() + " : ");
+                        int quantidade = lerInt.nextInt();
+                        estoqueItem.setQuantidade(estoqueItem.getQuantidade() + quantidade);
+                        System.out.println("Adicionada a quantidade do produto ao estoque com sucesso!! ");
+
+                        break;
+                    }
+                }
+                codigoNovo = true;
+                sair = true;
+            }
+
+            itens.setCodigo(codigo);
 
             while(sair) {
                 System.out.println("Informe a Categoria: \n1. Tênis\n2. Camisa\n3. Calça\n4. Bermuda\n5. Chinelo\n6. Bonê");

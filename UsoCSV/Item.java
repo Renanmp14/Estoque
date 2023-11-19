@@ -1,4 +1,4 @@
-public class Itens {
+public class Item {
 
     private int codigo;
     private Categoria categoria;
@@ -7,12 +7,12 @@ public class Itens {
     private int quantidade;
     private int quantidadeMinima;
 
-    public Itens (){
+    public Item(){
 
     }
 
     // Método construtor
-    public Itens(int codigo, Categoria categoria, String produto, double valor, int quantidade, int quantidadeMinima) {
+    public Item(int codigo, Categoria categoria, String produto, double valor, int quantidade, int quantidadeMinima) {
         this.codigo = codigo;
         this.categoria = categoria;
         this.nomeProduto = produto;

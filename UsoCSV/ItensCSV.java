@@ -7,14 +7,30 @@ public class ItensCSV {
 
     //Caminho do arquivo
     private String Arquivo = "./dados/Itens.csv";
-    private Itens itens = new Itens();
+    private Item item = new Item();
     Scanner lerInt = new Scanner(System.in);
     Scanner lerString = new Scanner(System.in);
     boolean sair = true;
-    ArrayList<Itens> estoque = new ArrayList<>();
+    ArrayList<Item> estoque = new ArrayList<>();
+
+    private static void escreverDadosNoCSV(String nomeArquivo, ArrayList<Item> estoque) {
+        try (BufferedWriter escreve = new BufferedWriter(new FileWriter(nomeArquivo))) {
+            // Escrever cabeçalho
+            escreve.write("Codigo;Categoria;Produto;Valor;Quantidade;QuantidadeMinima\n");
+            // Escrever dados
+            for (Item item : estoque) {
+                escreve.write(item.getCodigo() + ";" + item.getCategoria() + ";" + item.getNomeProduto() + ";"
+                        + item.getValor() + ";" + item.getQuantidade() + ";" + item.getQuantidadeMinima() + "\n");
+            }
+            // Escrever o flush
+            escreve.flush();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 
     //Add Item
-    public boolean adicionaItensSolicitados (){
+    public boolean adicionaItemSolicitado (){
         try{
             //Verificar a existencia do arquivo
             boolean arquivoExiste = new File(Arquivo).exists();
@@ -30,9 +46,9 @@ public class ItensCSV {
 
             //verifica se produto está no catálogo
             while (!codigoNovo) {
-                Itens item = new Itens();
+                Item item = new Item();
 
-                for (Itens estoqueItem : estoque) {
+                for (Item estoqueItem : estoque) {
                     if (estoqueItem.getCodigo() == codigo) {
                         System.out.println("Informe a quantidade a adicionar do produto " + estoqueItem.getNomeProduto() + " : ");
                         int quantidade = lerInt.nextInt();
@@ -41,39 +57,45 @@ public class ItensCSV {
 
                         break;
                     }
+
                 }
+                // Escrever dados atualizados de volta no arquivo CSV
+                escreverDadosNoCSV("Itens.csv", estoque);
+// Mostrar itens do estoque após a atualização
+                mostrarItensEstoque();
+
                 codigoNovo = true;
                 sair = true;
             }
 
-            itens.setCodigo(codigo);
+            item.setCodigo(codigo);
 
             while(sair) {
                 System.out.println("Informe a Categoria: \n1. Tênis\n2. Camisa\n3. Calça\n4. Bermuda\n5. Chinelo\n6. Bonê");
                 int categoria = lerInt.nextInt();
                 switch (categoria){
                     case 1:
-                        itens.setCategoria(Categoria.TENIS);
+                        item.setCategoria(Categoria.TENIS);
                         sair = false;
                         break;
                     case 2:
-                        itens.setCategoria(Categoria.CAMISA);
+                        item.setCategoria(Categoria.CAMISA);
                         sair = false;
                         break;
                     case 3:
-                        itens.setCategoria(Categoria.CALCA);
+                        item.setCategoria(Categoria.CALCA);
                         sair = false;
                         break;
                     case 4:
-                        itens.setCategoria(Categoria.BERMUDA);
+                        item.setCategoria(Categoria.BERMUDA);
                         sair = false;
                         break;
                     case 5:
-                        itens.setCategoria(Categoria.CHINELO);
+                        item.setCategoria(Categoria.CHINELO);
                         sair = false;
                         break;
                     case 6:
-                        itens.setCategoria(Categoria.BONE);
+                        item.setCategoria(Categoria.BONE);
                         sair = false;
                         break;
                     default:
@@ -82,17 +104,17 @@ public class ItensCSV {
                 }
             }
             System.out.println("Informe o Produto: ");
-            itens.setNomeProduto(lerString.nextLine());
+            item.setNomeProduto(lerString.nextLine());
             System.out.println("Informe o Valor: ");
-            itens.setValor(lerInt.nextDouble());
+            item.setValor(lerInt.nextDouble());
             System.out.println("Informe Quantidade:");
-            itens.setQuantidade(lerInt.nextInt());
+            item.setQuantidade(lerInt.nextInt());
             System.out.println("Informe Quantidade Minima: ");
-            itens.setQuantidadeMinima(lerInt.nextInt());
+            item.setQuantidadeMinima(lerInt.nextInt());
             System.out.println("Finalizado");
 
             //Escrever o produto na tabela
-            escreve.write(itens.getCodigo()+";"+itens.getCategoria()+";"+itens.getNomeProduto()+";"+itens.getValor()+";"+itens.getQuantidade()+";"+itens.getQuantidadeMinima()+"\n");
+            escreve.write(item.getCodigo()+";"+ item.getCategoria()+";"+ item.getNomeProduto()+";"+ item.getValor()+";"+ item.getQuantidade()+";"+ item.getQuantidadeMinima()+"\n");
 
             //Escreve o flush
             escreve.flush();
@@ -119,7 +141,7 @@ public class ItensCSV {
                 double valor = Double.parseDouble(fields[3]);
                 int quantidade = Integer.parseInt(fields[4]);
                 int quantidadeMinima = Integer.parseInt(fields[5]);
-                estoque.add(new Itens(codigo, categoria, nomeProduto, valor,quantidade,quantidadeMinima));
+                estoque.add(new Item(codigo, categoria, nomeProduto, valor,quantidade,quantidadeMinima));
 
                 itensDaLista = br.readLine();
             }

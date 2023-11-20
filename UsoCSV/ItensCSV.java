@@ -6,71 +6,27 @@ import java.util.Scanner;
 public class ItensCSV {
 
     //Caminho do arquivo
-    private String Arquivo = "./dados/Itens.csv";
+    private String Arquivo = "dados/Itens.csv";
     private Item item = new Item();
     Scanner lerInt = new Scanner(System.in);
     Scanner lerString = new Scanner(System.in);
     boolean sair = true;
     ArrayList<Item> estoque = new ArrayList<>();
 
-    private static void escreverDadosNoCSV(String nomeArquivo, ArrayList<Item> estoque) {
-        try (BufferedWriter escreve = new BufferedWriter(new FileWriter(nomeArquivo))) {
-            // Escrever cabeçalho
+    public boolean adicionaItensSolicitados (){
+    try{
+        //Verificar a existencia do arquivo
+        boolean arquivoExiste = new File(Arquivo).exists();
+
+        //Abrir o escritor do arquivo e validar se existe
+        FileWriter escreve = new FileWriter(Arquivo, StandardCharsets.ISO_8859_1,true);
+        if (!arquivoExiste){
             escreve.write("Codigo;Categoria;Produto;Valor;Quantidade;QuantidadeMinima\n");
-            // Escrever dados
-            for (Item item : estoque) {
-                escreve.write(item.getCodigo() + ";" + item.getCategoria() + ";" + item.getNomeProduto() + ";"
-                        + item.getValor() + ";" + item.getQuantidade() + ";" + item.getQuantidadeMinima() + "\n");
-            }
-            // Escrever o flush
-            escreve.flush();
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
         }
-    }
+        System.out.println("Informe o Código: ");
+        item.setCodigo(lerInt.nextInt());
 
-    //Add Item
-    public boolean adicionaItemSolicitado (){
-        try{
-            //Verificar a existencia do arquivo
-            boolean arquivoExiste = new File(Arquivo).exists();
-
-            //Abrir o escritor do arquivo e validar se existe
-            FileWriter escreve = new FileWriter(Arquivo, StandardCharsets.ISO_8859_1,true);
-            if (!arquivoExiste){
-                escreve.write("Codigo;Categoria;Produto;Valor;Quantidade;QuantidadeMinima\n");
-            }
-            System.out.println("Informe o Código: ");
-            int codigo = lerInt.nextInt();
-            boolean codigoNovo = false;
-
-            //verifica se produto está no catálogo
-            while (!codigoNovo) {
-                Item item = new Item();
-
-                for (Item estoqueItem : estoque) {
-                    if (estoqueItem.getCodigo() == codigo) {
-                        System.out.println("Informe a quantidade a adicionar do produto " + estoqueItem.getNomeProduto() + " : ");
-                        int quantidade = lerInt.nextInt();
-                        estoqueItem.setQuantidade(estoqueItem.getQuantidade() + quantidade);
-                        System.out.println("Adicionada a quantidade do produto ao estoque com sucesso!! ");
-
-                        break;
-                    }
-
-                }
-                // Escrever dados atualizados de volta no arquivo CSV
-                escreverDadosNoCSV("Itens.csv", estoque);
-// Mostrar itens do estoque após a atualização
-                mostrarItensEstoque();
-
-                codigoNovo = true;
-                sair = true;
-            }
-
-            item.setCodigo(codigo);
-
-            while(sair) {
+        while(sair) {
                 System.out.println("Informe a Categoria: \n1. Tênis\n2. Camisa\n3. Calça\n4. Bermuda\n5. Chinelo\n6. Bonê");
                 int categoria = lerInt.nextInt();
                 switch (categoria){
@@ -129,7 +85,12 @@ public class ItensCSV {
     }
 
     //Mostrar itens da Lista
-    public boolean mostrarItensEstoque (){
+    public String mostrarItensEstoque (){
+
+          return getEstoque().toString().replace("[", "").replace("]"," ");
+    }
+
+    public ArrayList<Item> getEstoque (){
         try(BufferedReader br = new BufferedReader(new FileReader(Arquivo))){
             br.readLine();
             String itensDaLista = br.readLine();
@@ -145,19 +106,18 @@ public class ItensCSV {
 
                 itensDaLista = br.readLine();
             }
-            System.out.println(estoque.toString().replace("[", "").replace("]"," "));
-        return true;
+            return estoque;
         }catch (IOException e){
             System.out.println(e.getMessage());
         }
-        return false;
+        return null;
     }
 
     //Modificar item
 
     //excluir item
 
-
     //Relatório
+
 
 }

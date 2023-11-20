@@ -76,6 +76,6 @@ public class Item {
                 ", nome do Produto: " + nomeProduto +
                 ", valor R$ " + valor +
                 ", Quantidade: " + quantidade +
-                ", Quantidade Minima:" + quantidadeMinima + "\n";
+                ", Quantidade Minima:" + quantidadeMinima;
     }
 }

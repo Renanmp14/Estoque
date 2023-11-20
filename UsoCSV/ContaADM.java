@@ -22,7 +22,8 @@ public class ContaADM extends ItensCSV{
                     System.out.println("Sem Função disponivel ainda");
                     break;
                 case 4: //Mostrar Itens do Estoque
-                    mostrarItensEstoque();
+                    System.out.println(mostrarItensEstoque());
+                    System.out.println();
                     break;
                 case 5: //Relatório de itens Faltantes do Estoque
                     System.out.println("Sem Função disponivel ainda");

@@ -23,24 +23,24 @@ public class Main {
                     String acLogin = lerLogin.nextLine();
                     System.out.println("Informe a Senha:");
                     String acSenha = lerSenha.nextLine();
-
                     if (acLogin.equals(adm.getLogin()) && acSenha.equals(adm.getSenha())) {
                         adm.menuADM();
                     } else {
                         System.out.println("Credenciais Erradas.");
                     }
                     break;
-                case 2:
-                    System.out.println("Em manutenção.");
-                    break;
-                case 3:
-                    System.out.println("Muito obrigado pelo acesso, até a Proxíma.");
-                    finalizar = false;
-                    break;
-                default:
-                    System.out.println("Opções Invalidas. Tente Novamente.");
-                    break;
+                    case 2:
+                            System.out.println("Em manutenção.");
+                            break;
+                        case 3:
+                            System.out.println("Muito obrigado pelo acesso, até a Proxíma.");
+                            finalizar = false;
+                            break;
+                        default:
+                            System.out.println("Opções Invalidas. Tente Novamente.");
+                            break;
             }
         }
     }
 }
+

@@ -10,26 +10,34 @@ public class ItensCSV {
     private Item item = new Item();
     Scanner lerInt = new Scanner(System.in);
     Scanner lerString = new Scanner(System.in);
-    boolean sair = true;
     ArrayList<Item> estoque = new ArrayList<>();
 
     public boolean adicionaItensSolicitados (){
     try{
         //Verificar a existencia do arquivo
         FileWriter escreve = getFileWriter();
+        ArrayList<Item> estoque = getEstoque();
 
-
+        boolean sair = true;
 
         while(sair) {
             System.out.println("Informe o Código: ");
             int codigo_temp = lerInt.nextInt();
 
-            if(codigoExisteNoEstoque(codigo_temp) == true){
-                System.out.println("Código já existe");
-                sair = false;
-                break;
+            if(estoque != null) {
+                for (Item valida : estoque) {
+                    if (valida.getCodigo() == codigo_temp) {
+                        System.out.println("Código já existe");
+                        System.out.println(valida.toString());
+                        sair = false;
+                        estoque = null;
+                        return false;
+                    } else {
+                        item.setCodigo(codigo_temp);
+                        sair = false;
+                    }
+                }
             }
-
             System.out.println("Informe a Categoria: \n1. Tênis\n2. Camisa\n3. Calça\n4. Bermuda\n5. Chinelo\n6. Bonê");
             int categoria = lerInt.nextInt();
             switch (categoria){
@@ -61,9 +69,9 @@ public class ItensCSV {
                     System.out.println("Opção Invalida. Tente Novamente.");
                     break;
             }
-
-            System.out.println("Informe o Produto: ");
+            System.out.println("Informe o Nome do Produto: ");
             item.setNomeProduto(lerString.nextLine());
+            //lerInt.nextLine();
             System.out.println("Informe o Valor: ");
             item.setValor(lerInt.nextDouble());
             System.out.println("Informe Quantidade:");
@@ -74,13 +82,13 @@ public class ItensCSV {
 
             //Escrever o produto na tabela
             escreve.write(item.getCodigo()+";"+ item.getCategoria()+";"+ item.getNomeProduto()+";"+ item.getValor()+";"+ item.getQuantidade()+";"+ item.getQuantidadeMinima()+"\n");
-
-            //Escreve o flush
-            escreve.flush();
-
-            //Fecha o escritor
-            escreve.close();
         }
+
+        //Escreve o flush
+        escreve.flush();
+
+        //Fecha o escritor
+        escreve.close();
         return true;
 
     }catch (IOException e){
@@ -100,13 +108,69 @@ public class ItensCSV {
         return escreve;
     }
 
-    //Mostrar itens da Lista
+    //Mostrar itens da Lista - Opção 4
     public String mostrarItensEstoque (){
 
           return getEstoque().toString().replace("[", "").replace("]"," ");
     }
 
-    public ArrayList<Item> getEstoque (){
+    public ArrayList<Item> getEstoque() {
+        try (BufferedReader br = new BufferedReader(new FileReader(Arquivo))) {
+            br.readLine(); // Ignorando a primeira linha (cabeçalho)
+            String itensDaLista = br.readLine();
+            while (itensDaLista != null) {
+                String[] fields = itensDaLista.split(";");
+
+                if (fields.length >= 6) { // Verifica se há pelo menos 6 campos
+                    int codigo = 0;
+                    try {
+                        codigo = Integer.parseInt(fields[0]);
+                    } catch (NumberFormatException e) {
+                        System.out.println("Erro ao converter código para inteiro: " + e.getMessage());
+                        // Lide com o erro, se necessário
+                    }
+
+                    Categoria categoria = Categoria.valueOf(fields[1].toUpperCase());
+                    String nomeProduto = fields[2];
+
+                    double valor = 0.0;
+                    try {
+                        valor = Double.parseDouble(fields[3]);
+                    } catch (NumberFormatException e) {
+                        System.out.println("Erro ao converter valor para double: " + e.getMessage());
+                        // Lide com o erro, se necessário
+                    }
+
+                    int quantidade = 0;
+                    try {
+                        quantidade = Integer.parseInt(fields[4]);
+                    } catch (NumberFormatException e) {
+                        System.out.println("Erro ao converter quantidade para inteiro: " + e.getMessage());
+                        // Lide com o erro, se necessário
+                    }
+
+                    int quantidadeMinima = 0;
+                    try {
+                        quantidadeMinima = Integer.parseInt(fields[5]);
+                    } catch (NumberFormatException e) {
+                        System.out.println("Erro ao converter quantidade mínima para inteiro: " + e.getMessage());
+                        // Lide com o erro, se necessário
+                    }
+
+                    estoque.add(new Item(codigo, categoria, nomeProduto, valor, quantidade, quantidadeMinima));
+                }
+
+                itensDaLista = br.readLine();
+            }
+            return estoque;
+        } catch (IOException e) {
+            System.out.println("Erro de E/S: " + e.getMessage());
+        }
+        return null;
+    }
+
+
+    /*public ArrayList<Item> getEstoque (){
         try(BufferedReader br = new BufferedReader(new FileReader(Arquivo))){
             br.readLine();
             String itensDaLista = br.readLine();
@@ -127,9 +191,9 @@ public class ItensCSV {
             System.out.println(e.getMessage());
         }
         return null;
-    }
+    }*/
 
-    public boolean codigoExisteNoEstoque(int codigo) {
+   /* public boolean codigoExisteNoEstoque(int codigo) {
         try (BufferedReader br = new BufferedReader(new FileReader(Arquivo))) {
             br.readLine(); // Ignorando a primeira linha (cabeçalho)
             String itensDaLista = br.readLine();
@@ -148,7 +212,7 @@ public class ItensCSV {
         }
 
         return false; // O código não foi encontrado no estoque
-    }
+    }*/
 
     //Modificar item
 

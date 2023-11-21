@@ -16,49 +16,52 @@ public class ItensCSV {
     public boolean adicionaItensSolicitados (){
     try{
         //Verificar a existencia do arquivo
-        boolean arquivoExiste = new File(Arquivo).exists();
+        FileWriter escreve = getFileWriter();
 
-        //Abrir o escritor do arquivo e validar se existe
-        FileWriter escreve = new FileWriter(Arquivo, StandardCharsets.ISO_8859_1,true);
-        if (!arquivoExiste){
-            escreve.write("Codigo;Categoria;Produto;Valor;Quantidade;QuantidadeMinima\n");
-        }
-        System.out.println("Informe o Código: ");
-        item.setCodigo(lerInt.nextInt());
+
 
         while(sair) {
-                System.out.println("Informe a Categoria: \n1. Tênis\n2. Camisa\n3. Calça\n4. Bermuda\n5. Chinelo\n6. Bonê");
-                int categoria = lerInt.nextInt();
-                switch (categoria){
-                    case 1:
-                        item.setCategoria(Categoria.TENIS);
-                        sair = false;
-                        break;
-                    case 2:
-                        item.setCategoria(Categoria.CAMISA);
-                        sair = false;
-                        break;
-                    case 3:
-                        item.setCategoria(Categoria.CALCA);
-                        sair = false;
-                        break;
-                    case 4:
-                        item.setCategoria(Categoria.BERMUDA);
-                        sair = false;
-                        break;
-                    case 5:
-                        item.setCategoria(Categoria.CHINELO);
-                        sair = false;
-                        break;
-                    case 6:
-                        item.setCategoria(Categoria.BONE);
-                        sair = false;
-                        break;
-                    default:
-                        System.out.println("Opção Invalida. Tente Novamente.");
-                        break;
-                }
+            System.out.println("Informe o Código: ");
+            int codigo_temp = lerInt.nextInt();
+
+            if(codigoExisteNoEstoque(codigo_temp) == true){
+                System.out.println("Código já existe");
+                sair = false;
+                break;
             }
+
+            System.out.println("Informe a Categoria: \n1. Tênis\n2. Camisa\n3. Calça\n4. Bermuda\n5. Chinelo\n6. Bonê");
+            int categoria = lerInt.nextInt();
+            switch (categoria){
+                case 1:
+                    item.setCategoria(Categoria.TENIS);
+                    sair = false;
+                    break;
+                case 2:
+                    item.setCategoria(Categoria.CAMISA);
+                    sair = false;
+                    break;
+                case 3:
+                    item.setCategoria(Categoria.CALCA);
+                    sair = false;
+                    break;
+                case 4:
+                    item.setCategoria(Categoria.BERMUDA);
+                    sair = false;
+                    break;
+                case 5:
+                    item.setCategoria(Categoria.CHINELO);
+                    sair = false;
+                    break;
+                case 6:
+                    item.setCategoria(Categoria.BONE);
+                    sair = false;
+                    break;
+                default:
+                    System.out.println("Opção Invalida. Tente Novamente.");
+                    break;
+            }
+
             System.out.println("Informe o Produto: ");
             item.setNomeProduto(lerString.nextLine());
             System.out.println("Informe o Valor: ");
@@ -77,11 +80,24 @@ public class ItensCSV {
 
             //Fecha o escritor
             escreve.close();
-
-        }catch (IOException e){
-            e.printStackTrace();
         }
         return true;
+
+    }catch (IOException e){
+        e.printStackTrace();
+    }
+    return false;
+    }
+
+    private FileWriter getFileWriter() throws IOException {
+        boolean arquivoExiste = new File(Arquivo).exists();
+
+        //Abrir o escritor do arquivo e validar se existe
+        FileWriter escreve = new FileWriter(Arquivo, StandardCharsets.ISO_8859_1,true);
+        if (!arquivoExiste){
+            escreve.write("Codigo;Categoria;Produto;Valor;Quantidade;QuantidadeMinima\n");
+        }
+        return escreve;
     }
 
     //Mostrar itens da Lista
@@ -113,9 +129,31 @@ public class ItensCSV {
         return null;
     }
 
+    public boolean codigoExisteNoEstoque(int codigo) {
+        try (BufferedReader br = new BufferedReader(new FileReader(Arquivo))) {
+            br.readLine(); // Ignorando a primeira linha (cabeçalho)
+            String itensDaLista = br.readLine();
+            while (itensDaLista != null) {
+                String[] fields = itensDaLista.split(";");
+                int codigoExistente = Integer.parseInt(fields[0]);
+
+                if (codigoExistente == codigo) {
+                    return true; // O código já existe no estoque
+                }
+
+                itensDaLista = br.readLine();
+            }
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return false; // O código não foi encontrado no estoque
+    }
+
     //Modificar item
 
     //excluir item
+
 
     //Relatório
 

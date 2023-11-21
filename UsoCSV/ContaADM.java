@@ -5,15 +5,17 @@ public class ContaADM extends ItensCSV{
     private String senha = "admin";
     private boolean sair = true;
     Scanner ler = new Scanner(System.in);
+    int escolha = 0;
     public boolean menuADM (){
         System.out.println("Bem Víndo ao Ambiente do Administrador");
         while (sair) {
             System.out.println("Escolha sua operação:\n1. Adicionar Item no Estoque\n2. Remover item do Estoque\n3. Modificar quantidade do item\n4. Lista de Itens" +
                     "\n5. Relatório de itens abaixo do estoque minímo\n6. Sair do menu");
-            int escolha = ler.nextInt();
+            escolha = ler.nextInt();
             switch (escolha){
                 case 1: //Adiciona Item no Estoque
                     adicionaItensSolicitados();
+                    System.out.println("");
                     break;
                 case 2: //Remover item do Estoque
                     System.out.println("Sem Função disponivel ainda");
@@ -26,7 +28,7 @@ public class ContaADM extends ItensCSV{
                     System.out.println();
                     break;
                 case 5: //Relatório de itens Faltantes do Estoque
-                    System.out.println("Sem Função disponivel ainda");
+                    System.out.println(getEstoque());
                     break;
                 case 6: // Finaliza operação
                     System.out.println("Operação Finalizada.");

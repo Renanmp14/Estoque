@@ -12,6 +12,7 @@ public class ItensCSV {
     Scanner lerString = new Scanner(System.in);
     ArrayList<Item> estoque = new ArrayList<>();
 
+    //Adicionar item no estoque - Opção 1
     public boolean adicionaItensSolicitados (){
     try{
         //Verificar a existencia do arquivo
@@ -25,12 +26,12 @@ public class ItensCSV {
             int codigo_temp = lerInt.nextInt();
 
             if(estoque != null) {
-                for (Item valida : estoque) {
-                    if (valida.getCodigo() == codigo_temp) {
+                for (Item estoque_temp : estoque) {
+                    if (estoque_temp.getCodigo() == codigo_temp) {
                         System.out.println("Código já existe");
-                        System.out.println(valida.toString());
+                        System.out.println(estoque_temp.toString());
+                        estoque.clear();
                         sair = false;
-                        estoque = null;
                         return false;
                     } else {
                         item.setCodigo(codigo_temp);
@@ -89,12 +90,36 @@ public class ItensCSV {
 
         //Fecha o escritor
         escreve.close();
+        estoque.clear();
         return true;
 
     }catch (IOException e){
         e.printStackTrace();
     }
     return false;
+    }
+
+    //Mostrar itens com estoque abaixo - Opção 5
+    public String mostrarEstoqueAbaixo() {
+        ArrayList<Item> estoque = getEstoque();
+        StringBuilder resultado = new StringBuilder();
+
+        if (estoque != null) {
+            for (Item estoque_temp : estoque) {
+                if (estoque_temp.getQuantidadeMinima() > estoque_temp.getQuantidade()) {
+                    resultado.append(estoque_temp.toString()).append("\n");
+                }
+                else{
+                    return "Não possui itens com estoque abaixo";
+                }
+            }
+        }
+        return resultado.toString();
+    }
+
+    //Mostrar itens da Lista - Opção 4
+    public String mostrarItensEstoque (){
+          return getEstoque().toString().replace("[", "").replace("]"," ");
     }
 
     private FileWriter getFileWriter() throws IOException {
@@ -106,12 +131,6 @@ public class ItensCSV {
             escreve.write("Codigo;Categoria;Produto;Valor;Quantidade;QuantidadeMinima\n");
         }
         return escreve;
-    }
-
-    //Mostrar itens da Lista - Opção 4
-    public String mostrarItensEstoque (){
-
-          return getEstoque().toString().replace("[", "").replace("]"," ");
     }
 
     public ArrayList<Item> getEstoque() {
@@ -127,7 +146,6 @@ public class ItensCSV {
                         codigo = Integer.parseInt(fields[0]);
                     } catch (NumberFormatException e) {
                         System.out.println("Erro ao converter código para inteiro: " + e.getMessage());
-                        // Lide com o erro, se necessário
                     }
 
                     Categoria categoria = Categoria.valueOf(fields[1].toUpperCase());
@@ -138,7 +156,6 @@ public class ItensCSV {
                         valor = Double.parseDouble(fields[3]);
                     } catch (NumberFormatException e) {
                         System.out.println("Erro ao converter valor para double: " + e.getMessage());
-                        // Lide com o erro, se necessário
                     }
 
                     int quantidade = 0;
@@ -146,7 +163,6 @@ public class ItensCSV {
                         quantidade = Integer.parseInt(fields[4]);
                     } catch (NumberFormatException e) {
                         System.out.println("Erro ao converter quantidade para inteiro: " + e.getMessage());
-                        // Lide com o erro, se necessário
                     }
 
                     int quantidadeMinima = 0;
@@ -154,7 +170,6 @@ public class ItensCSV {
                         quantidadeMinima = Integer.parseInt(fields[5]);
                     } catch (NumberFormatException e) {
                         System.out.println("Erro ao converter quantidade mínima para inteiro: " + e.getMessage());
-                        // Lide com o erro, se necessário
                     }
 
                     estoque.add(new Item(codigo, categoria, nomeProduto, valor, quantidade, quantidadeMinima));
@@ -193,26 +208,6 @@ public class ItensCSV {
         return null;
     }*/
 
-   /* public boolean codigoExisteNoEstoque(int codigo) {
-        try (BufferedReader br = new BufferedReader(new FileReader(Arquivo))) {
-            br.readLine(); // Ignorando a primeira linha (cabeçalho)
-            String itensDaLista = br.readLine();
-            while (itensDaLista != null) {
-                String[] fields = itensDaLista.split(";");
-                int codigoExistente = Integer.parseInt(fields[0]);
-
-                if (codigoExistente == codigo) {
-                    return true; // O código já existe no estoque
-                }
-
-                itensDaLista = br.readLine();
-            }
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
-
-        return false; // O código não foi encontrado no estoque
-    }*/
 
     //Modificar item
 

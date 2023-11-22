@@ -14,8 +14,9 @@ public class ContaADM extends ItensCSV{
             escolha = ler.nextInt();
             switch (escolha){
                 case 1: //Adiciona Item no Estoque
+                    System.out.println();
                     adicionaItensSolicitados();
-                    System.out.println("");
+                    System.out.println();
                     break;
                 case 2: //Remover item do Estoque
                     System.out.println("Sem Função disponivel ainda");
@@ -24,11 +25,16 @@ public class ContaADM extends ItensCSV{
                     System.out.println("Sem Função disponivel ainda");
                     break;
                 case 4: //Mostrar Itens do Estoque
+                    System.out.println();
                     System.out.println(mostrarItensEstoque());
+                    estoque.clear();
                     System.out.println();
                     break;
                 case 5: //Relatório de itens Faltantes do Estoque
-                    System.out.println(getEstoque());
+                    System.out.println();
+                    System.out.println(mostrarEstoqueAbaixo());
+                    estoque.clear();
+                    System.out.println();
                     break;
                 case 6: // Finaliza operação
                     System.out.println("Operação Finalizada.");

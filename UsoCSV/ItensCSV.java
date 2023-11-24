@@ -100,7 +100,7 @@ public class ItensCSV {
     }
 
     //Mostrar itens com estoque abaixo - Opção 5
-    public String mostrarEstoqueAbaixo() {
+    public String itenEstoqueAbaixo() {
         ArrayList<Item> estoque = getEstoque();
         StringBuilder resultado = new StringBuilder();
 
@@ -109,10 +109,8 @@ public class ItensCSV {
                 if (estoque_temp.getQuantidadeMinima() > estoque_temp.getQuantidade()) {
                     resultado.append(estoque_temp.toString()).append("\n");
                 }
-                else{
-                    return "Não possui itens com estoque abaixo";
-                }
             }
+
         }
         return resultado.toString();
     }

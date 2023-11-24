@@ -32,7 +32,13 @@ public class ContaADM extends ItensCSV{
                     break;
                 case 5: //Relatório de itens Faltantes do Estoque
                     System.out.println();
-                    System.out.println(mostrarEstoqueAbaixo());
+                    String resultado = itenEstoqueAbaixo();
+                    if(resultado.isEmpty()){
+                        System.out.println("Não tem produtos com estoque abaixo do mínimo.");
+                    }
+                    else{
+                        System.out.println(resultado);
+                    }
                     estoque.clear();
                     System.out.println();
                     break;

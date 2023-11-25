@@ -13,90 +13,86 @@ public class ItensCSV {
     ArrayList<Item> estoque = new ArrayList<>();
 
     //Adicionar item no estoque - Opção 1
-    public boolean adicionaItensSolicitados (){
-    try{
-        //Verificar a existencia do arquivo
-        FileWriter escreve = getFileWriter();
-        ArrayList<Item> estoque = getEstoque();
+    public boolean adicionaItensSolicitados() {
+        try {
+            //Verificar a existencia do arquivo
+            FileWriter escreve = getFileWriter();
+            //ArrayList<Item> estoque = getEstoque();
 
-        boolean sair = true;
+            boolean sair = true;
 
-        while(sair) {
-            System.out.println("Informe o Código: ");
-            int codigo_temp = lerInt.nextInt();
-
-            if(estoque != null) {
-                for (Item estoque_temp : estoque) {
-                    if (estoque_temp.getCodigo() == codigo_temp) {
-                        System.out.println("Código já existe");
-                        System.out.println(estoque_temp.toString());
-                        estoque.clear();
-                        sair = false;
-                        return false;
-                    } else {
-                        item.setCodigo(codigo_temp);
-                        sair = false;
-                    }
+            while (sair) {
+                System.out.println("Informe o Código: ");
+                int codigo_temp = lerInt.nextInt();
+                if (vericaCódigo(codigo_temp) == true) {
+                    System.out.println("Código já existe");
+                    estoque.clear();
+                    sair = false;
+                    return false;
+                } else {
+                    item.setCodigo(codigo_temp);
+                    sair = false;
                 }
-            }
-            System.out.println("Informe a Categoria: \n1. Tênis\n2. Camisa\n3. Calça\n4. Bermuda\n5. Chinelo\n6. Bonê");
-            int categoria = lerInt.nextInt();
-            switch (categoria){
-                case 1:
-                    item.setCategoria(Categoria.TENIS);
-                    sair = false;
-                    break;
-                case 2:
-                    item.setCategoria(Categoria.CAMISA);
-                    sair = false;
-                    break;
-                case 3:
-                    item.setCategoria(Categoria.CALCA);
-                    sair = false;
-                    break;
-                case 4:
-                    item.setCategoria(Categoria.BERMUDA);
-                    sair = false;
-                    break;
-                case 5:
-                    item.setCategoria(Categoria.CHINELO);
-                    sair = false;
-                    break;
-                case 6:
-                    item.setCategoria(Categoria.BONE);
-                    sair = false;
-                    break;
-                default:
-                    System.out.println("Opção Invalida. Tente Novamente.");
-                    break;
-            }
-            System.out.println("Informe o Nome do Produto: ");
-            item.setNomeProduto(lerString.nextLine());
-            //lerInt.nextLine();
-            System.out.println("Informe o Valor: ");
-            item.setValor(lerInt.nextDouble());
-            System.out.println("Informe Quantidade:");
-            item.setQuantidade(lerInt.nextInt());
-            System.out.println("Informe Quantidade Minima: ");
-            item.setQuantidadeMinima(lerInt.nextInt());
-            System.out.println("Finalizado");
 
-            //Escrever o produto na tabela
-            escreve.write(item.getCodigo()+";"+ item.getCategoria()+";"+ item.getNomeProduto()+";"+ item.getValor()+";"+ item.getQuantidade()+";"+ item.getQuantidadeMinima()+"\n");
+                System.out.println("Informe a Categoria: \n1. Tênis\n2. Camisa\n3. Calça\n4. Bermuda\n5. Chinelo\n6. Bonê");
+                int categoria = lerInt.nextInt();
+                switch (categoria) {
+                    case 1:
+                        item.setCategoria(Categoria.TENIS);
+                        sair = false;
+                        break;
+                    case 2:
+                        item.setCategoria(Categoria.CAMISA);
+                        sair = false;
+                        break;
+                    case 3:
+                        item.setCategoria(Categoria.CALCA);
+                        sair = false;
+                        break;
+                    case 4:
+                        item.setCategoria(Categoria.BERMUDA);
+                        sair = false;
+                        break;
+                    case 5:
+                        item.setCategoria(Categoria.CHINELO);
+                        sair = false;
+                        break;
+                    case 6:
+                        item.setCategoria(Categoria.BONE);
+                        sair = false;
+                        break;
+                    default:
+                        System.out.println("Opção Invalida. Tente Novamente.");
+                        break;
+                }
+                System.out.println("Informe o Nome do Produto: ");
+                item.setNomeProduto(lerString.nextLine());
+                //lerInt.nextLine();
+                System.out.println("Informe o Valor: ");
+                item.setValor(lerInt.nextDouble());
+                System.out.println("Informe Quantidade:");
+                item.setQuantidade(lerInt.nextInt());
+                System.out.println("Informe Quantidade Minima: ");
+                item.setQuantidadeMinima(lerInt.nextInt());
+                System.out.println("Finalizado");
+
+                //Escrever o produto na tabela
+                escreve.write(item.getCodigo() + ";" + item.getCategoria() + ";" + item.getNomeProduto() + ";" + item.getValor() + ";" + item.getQuantidade() + ";" + item.getQuantidadeMinima() + "\n");
+            }
+
+
+            //Escreve o flush
+            escreve.flush();
+
+            //Fecha o escritor
+            escreve.close();
+            estoque.clear();
+            return true;
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-
-        //Escreve o flush
-        escreve.flush();
-
-        //Fecha o escritor
-        escreve.close();
-        estoque.clear();
-        return true;
-
-    }catch (IOException e){
-        e.printStackTrace();
-    }
-    return false;
+        return false;
     }
 
     //Mostrar itens com estoque abaixo - Opção 5
@@ -116,16 +112,16 @@ public class ItensCSV {
     }
 
     //Mostrar itens da Lista - Opção 4
-    public String mostrarItensEstoque (){
-          return getEstoque().toString().replace("[", "").replace("]"," ");
+    public String mostrarItensEstoque() {
+        return getEstoque().toString().replace("[", "").replace("]", " ");
     }
 
     private FileWriter getFileWriter() throws IOException {
         boolean arquivoExiste = new File(Arquivo).exists();
 
         //Abrir o escritor do arquivo e validar se existe
-        FileWriter escreve = new FileWriter(Arquivo, StandardCharsets.ISO_8859_1,true);
-        if (!arquivoExiste){
+        FileWriter escreve = new FileWriter(Arquivo, StandardCharsets.ISO_8859_1, true);
+        if (!arquivoExiste) {
             escreve.write("Codigo;Categoria;Produto;Valor;Quantidade;QuantidadeMinima\n");
         }
         return escreve;
@@ -182,37 +178,18 @@ public class ItensCSV {
         return null;
     }
 
-
-    /*public ArrayList<Item> getEstoque (){
-        try(BufferedReader br = new BufferedReader(new FileReader(Arquivo))){
-            br.readLine();
-            String itensDaLista = br.readLine();
-            while(itensDaLista != null){
-                String[] fields = itensDaLista.split(";");
-                int codigo = Integer.parseInt(fields[0]);
-                Categoria categoria = Categoria.valueOf(fields[1].toUpperCase());
-                String nomeProduto = fields[2];
-                double valor = Double.parseDouble(fields[3]);
-                int quantidade = Integer.parseInt(fields[4]);
-                int quantidadeMinima = Integer.parseInt(fields[5]);
-                estoque.add(new Item(codigo, categoria, nomeProduto, valor,quantidade,quantidadeMinima));
-
-                itensDaLista = br.readLine();
+    public boolean vericaCódigo(int valor) {
+        ArrayList<Item> estoque = getEstoque();
+        if (estoque != null) {
+            for (Item estoque_temp : estoque) {
+                if (estoque_temp.getCodigo() == valor) {
+                    return true;
+                }
             }
-            return estoque;
-        }catch (IOException e){
-            System.out.println(e.getMessage());
         }
-        return null;
-    }*/
-
-
-    //Modificar item
-
-    //excluir item
-
-
-    //Relatório
-
-
+        return false;
+    }
 }
+
+
+

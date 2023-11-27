@@ -12,21 +12,17 @@ public class ItensCSV {
     Scanner lerString = new Scanner(System.in);
     ArrayList<Item> estoque = new ArrayList<>();
 
-    //Adicionar item no estoque - Opção 1
+    //Adicionar item no Estoque - Opção 1
     public boolean adicionaItensSolicitados() {
         try {
             //Verificar a existencia do arquivo
             FileWriter escreve = getFileWriter();
-            //ArrayList<Item> estoque = getEstoque();
-
             boolean sair = true;
-
             while (sair) {
                 System.out.println("Informe o Código: ");
                 int codigo_temp = lerInt.nextInt();
                 if (vericaCódigo(codigo_temp) != null) {
                     System.out.println("Código já existe");
-                    estoque.clear();
                     sair = false;
                     return false;
                 } else {
@@ -86,7 +82,7 @@ public class ItensCSV {
 
             //Fecha o escritor
             escreve.close();
-            estoque.clear();
+
             return true;
 
         } catch (IOException e) {
@@ -94,28 +90,115 @@ public class ItensCSV {
         }
         return false;
     }
+    //Remover Item no Estoque - Opção 2
+    public boolean removerItem(int codigo) {
+        try {
+            String path = "dados/Itens.csv";
+            File arquivoOriginal = new File("dados/Itens.csv");
+            File arquivoTemporario = new File("UsoCSV/Itens.csv");
 
+            if (vericaCódigo(codigo) == null) {
+                return false;
+            }
+
+            ArrayList<Item> estoqueTemporario = getEstoque();
+
+            BufferedWriter escreve = new BufferedWriter(new FileWriter(arquivoTemporario, StandardCharsets.ISO_8859_1));
+
+            escreve.write("Codigo;Categoria;Produto;Valor;Quantidade;QuantidadeMinima\n");
+
+            for (Item item : estoqueTemporario) {
+                if (item.getCodigo() != codigo) {
+                    // Escrever o item no arquivo temporário, exceto o que está sendo removido
+                    escreve.write(item.getCodigo() + ";" + item.getCategoria() + ";" +
+                            item.getNomeProduto() + ";" + item.getValor() + ";" +
+                            item.getQuantidade() + ";" + item.getQuantidadeMinima() + "\n");
+                }
+            }
+
+            escreve.close();
+
+            // Excluir o arquivo original
+            arquivoOriginal.delete();
+
+            // Renomear o arquivo temporário para o nome do arquivo original
+            arquivoTemporario.renameTo(new File(path));
+
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    //Modificar quantidade do Estoque - Opção 3
+    public boolean modificarItem(int codigo, int quantidade) {
+        try {
+            String path = "dados/Itens.csv";
+            //ArrayList<Item> estoqueTemporario = getEstoque();
+            File arquivoOriginal = new File("dados/Itens.csv");
+            File arquivoTemporario = new File("UsoCSV/Itens.csv");
+
+
+            if (vericaCódigo(codigo) == null){
+                return false;
+            }
+            ArrayList<Item> estoqueTemporario = getEstoque();
+
+            BufferedWriter escreve = new BufferedWriter(new FileWriter(arquivoTemporario, StandardCharsets.ISO_8859_1));
+
+            escreve.write("Codigo;Categoria;Produto;Valor;Quantidade;QuantidadeMinima\n");
+
+            for (Item item : estoqueTemporario) {
+                if (item.getCodigo() == codigo) {
+                    item.setQuantidade(item.getQuantidade() + quantidade);
+                }
+                // Escrever o item atualizado no arquivo temporário
+                escreve.write(item.getCodigo() + ";" + item.getCategoria() + ";" +
+                        item.getNomeProduto() + ";" + item.getValor() + ";" +
+                        item.getQuantidade() + ";" + item.getQuantidadeMinima() + "\n");
+            }
+
+            escreve.close();
+
+            // Excluir o arquivo original
+            arquivoOriginal.delete();
+
+            arquivoTemporario.renameTo(new File(path));
+
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    //Mostrar itens da Lista - Opção 4
+    public String mostrarItensEstoque() {
+        ArrayList<Item> estoque = getEstoque();
+        StringBuilder resultado = new StringBuilder();
+        if (estoque != null) {
+            for (Item estoque_temp : estoque) {
+                resultado.append(estoque_temp.getCodigo()+" || "+estoque_temp.getCategoria()+" || "
+                        +estoque_temp.getNomeProduto()+" || R$ "+ estoque_temp.getValor()+" || " + estoque_temp.getQuantidade()+" || "
+                        +estoque_temp.getQuantidadeMinima()).append("\n");
+            }
+        }
+        return resultado.toString();
+    }
     //Mostrar itens com estoque abaixo - Opção 5
     public String itenEstoqueAbaixo() {
         ArrayList<Item> estoque = getEstoque();
         StringBuilder resultado = new StringBuilder();
-
         if (estoque != null) {
             for (Item estoque_temp : estoque) {
                 if (estoque_temp.getQuantidadeMinima() > estoque_temp.getQuantidade()) {
-                    resultado.append(estoque_temp.toString()).append("\n");
+                    resultado.append(estoque_temp.getCodigo()+" || "+estoque_temp.getNomeProduto()+" || "+estoque_temp.getQuantidade()+" || "
+                            +estoque_temp.getQuantidadeMinima()).append("\n");
                 }
             }
-
         }
         return resultado.toString();
     }
-
-    //Mostrar itens da Lista - Opção 4
-    public String mostrarItensEstoque() {
-        return getEstoque().toString().replace("[", "").replace("]", " ");
-    }
-
+    //Valida a existencia do arquivo no diretório
     private FileWriter getFileWriter() throws IOException {
         boolean arquivoExiste = new File(Arquivo).exists();
 
@@ -126,8 +209,9 @@ public class ItensCSV {
         }
         return escreve;
     }
-
+    //Cria o estoque Temporario
     public ArrayList<Item> getEstoque() {
+        estoque.clear();
         try (BufferedReader br = new BufferedReader(new FileReader(Arquivo))) {
             br.readLine(); // Ignorando a primeira linha (cabeçalho)
             String itensDaLista = br.readLine();
@@ -177,7 +261,7 @@ public class ItensCSV {
         }
         return null;
     }
-
+    //Verifica a existencia do código
     public Item vericaCódigo(int codigo) {
         ArrayList<Item> estoque = getEstoque();
         if (estoque != null) {
@@ -188,97 +272,8 @@ public class ItensCSV {
                 }
             }
         }
-        estoque.clear();
         return null;
     }
-
-
-    //Modificar item
-
-    public boolean modificarItem(int codigo, int quantidade) {
-        try {
-            String path = "dados/Itens.csv";
-            //ArrayList<Item> estoqueTemporario = getEstoque();
-            File arquivoOriginal = new File("dados/Itens.csv");
-            File arquivoTemporario = new File("UsoCSV/Itens.csv");
-
-
-            if (vericaCódigo(codigo) == null){
-                return false;
-            }
-            ArrayList<Item> estoqueTemporario = getEstoque();
-
-            BufferedWriter escreve = new BufferedWriter(new FileWriter(arquivoTemporario, StandardCharsets.ISO_8859_1));
-
-            escreve.write("Codigo;Categoria;Produto;Valor;Quantidade;QuantidadeMinima\n");
-
-            for (Item item : estoqueTemporario) {
-                if (item.getCodigo() == codigo) {
-                    item.setQuantidade(item.getQuantidade() + quantidade);
-                }
-                // Escrever o item atualizado no arquivo temporário
-                escreve.write(item.getCodigo() + ";" + item.getCategoria() + ";" +
-                        item.getNomeProduto() + ";" + item.getValor() + ";" +
-                        item.getQuantidade() + ";" + item.getQuantidadeMinima() + "\n");
-            }
-
-            escreve.close();
-
-            // Excluir o arquivo original
-            arquivoOriginal.delete();
-
-            arquivoTemporario.renameTo(new File(path));
-
-            estoqueTemporario.clear();
-            return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-
-    public boolean removerItem(int codigo) {
-        try {
-            String path = "dados/Itens.csv";
-            File arquivoOriginal = new File("dados/Itens.csv");
-            File arquivoTemporario = new File("UsoCSV/Itens.csv");
-
-            if (vericaCódigo(codigo) == null) {
-                return false;
-            }
-
-            ArrayList<Item> estoqueTemporario = getEstoque();
-
-            BufferedWriter escreve = new BufferedWriter(new FileWriter(arquivoTemporario, StandardCharsets.ISO_8859_1));
-
-            escreve.write("Codigo;Categoria;Produto;Valor;Quantidade;QuantidadeMinima\n");
-
-            for (Item item : estoqueTemporario) {
-                if (item.getCodigo() != codigo) {
-                    // Escrever o item no arquivo temporário, exceto o que está sendo removido
-                    escreve.write(item.getCodigo() + ";" + item.getCategoria() + ";" +
-                            item.getNomeProduto() + ";" + item.getValor() + ";" +
-                            item.getQuantidade() + ";" + item.getQuantidadeMinima() + "\n");
-                }
-            }
-
-            escreve.close();
-
-            // Excluir o arquivo original
-            arquivoOriginal.delete();
-
-            // Renomear o arquivo temporário para o nome do arquivo original
-            arquivoTemporario.renameTo(new File(path));
-
-            estoqueTemporario.clear();
-            return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
 
 }
 

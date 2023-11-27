@@ -1,3 +1,5 @@
+package classes;
+
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -30,7 +32,7 @@ public class ItensCSV {
                     sair = false;
                 }
 
-                System.out.println("Informe a Categoria: \n1. Tênis\n2. Camisa\n3. Calça\n4. Bermuda\n5. Chinelo\n6. Bonê");
+                System.out.println("Informe a classes.Categoria: \n1. Tênis\n2. Camisa\n3. Calça\n4. Bermuda\n5. Chinelo\n6. Bonê");
                 int categoria = lerInt.nextInt();
                 switch (categoria) {
                     case 1:
@@ -90,12 +92,12 @@ public class ItensCSV {
         }
         return false;
     }
-    //Remover Item no Estoque - Opção 2
+    //Remover classes.Item no Estoque - Opção 2
     public boolean removerItem(int codigo) {
         try {
             String path = "dados/Itens.csv";
             File arquivoOriginal = new File("dados/Itens.csv");
-            File arquivoTemporario = new File("UsoCSV/Itens.csv");
+            File arquivoTemporario = new File("ControleEstoque/Itens.csv");
 
             if (vericaCódigo(codigo) == null) {
                 return false;
@@ -105,7 +107,7 @@ public class ItensCSV {
 
             BufferedWriter escreve = new BufferedWriter(new FileWriter(arquivoTemporario, StandardCharsets.ISO_8859_1));
 
-            escreve.write("Codigo;Categoria;Produto;Valor;Quantidade;QuantidadeMinima\n");
+            escreve.write("Codigo;classes.Categoria;Produto;Valor;Quantidade;QuantidadeMinima\n");
 
             for (Item item : estoqueTemporario) {
                 if (item.getCodigo() != codigo) {
@@ -134,23 +136,21 @@ public class ItensCSV {
     public boolean modificarItem(int codigo, int quantidade) {
         try {
             String path = "dados/Itens.csv";
-            //ArrayList<Item> estoqueTemporario = getEstoque();
             File arquivoOriginal = new File("dados/Itens.csv");
-            File arquivoTemporario = new File("UsoCSV/Itens.csv");
-
-
+            File arquivoTemporario = new File("ControleEstoque/Itens.csv");
             if (vericaCódigo(codigo) == null){
                 return false;
             }
             ArrayList<Item> estoqueTemporario = getEstoque();
-
             BufferedWriter escreve = new BufferedWriter(new FileWriter(arquivoTemporario, StandardCharsets.ISO_8859_1));
-
-            escreve.write("Codigo;Categoria;Produto;Valor;Quantidade;QuantidadeMinima\n");
+            escreve.write("Codigo;classes.Categoria;Produto;Valor;Quantidade;QuantidadeMinima\n");
 
             for (Item item : estoqueTemporario) {
                 if (item.getCodigo() == codigo) {
                     item.setQuantidade(item.getQuantidade() + quantidade);
+                }
+                if (item.getQuantidade() <= 0 ){
+                    item.setQuantidade(0);
                 }
                 // Escrever o item atualizado no arquivo temporário
                 escreve.write(item.getCodigo() + ";" + item.getCategoria() + ";" +
@@ -172,32 +172,59 @@ public class ItensCSV {
         }
     }
     //Mostrar itens da Lista - Opção 4
-    public String mostrarItensEstoque() {
+    public void mostrarItensEstoque() {
         ArrayList<Item> estoque = getEstoque();
-        StringBuilder resultado = new StringBuilder();
+        System.out.printf("%-15s%-15s%-35s%-13s%-15s%-15s%n",
+                "CÓDIGO", "CATEGORIA", "NOME DO PRODUTO",
+                "VALOR", "QUANTIDADE", "ESTOQUE MINIMO");
+        System.out.println("----------------------------------------------" +
+                "-------------------------------------------------------------");
         if (estoque != null) {
             for (Item estoque_temp : estoque) {
-                resultado.append(estoque_temp.getCodigo()+" || "+estoque_temp.getCategoria()+" || "
-                        +estoque_temp.getNomeProduto()+" || R$ "+ estoque_temp.getValor()+" || " + estoque_temp.getQuantidade()+" || "
-                        +estoque_temp.getQuantidadeMinima()).append("\n");
+                System.out.printf("%-15d%-15s%-35s%-13.2f%-15d%-10d%n", estoque_temp.getCodigo(),
+                        estoque_temp.getCategoria().toString(),
+                        estoque_temp.getNomeProduto(),
+                        estoque_temp.getValor(),
+                        estoque_temp.getQuantidade(),
+                        estoque_temp.getQuantidadeMinima());
             }
         }
-        return resultado.toString();
+        System.out.println("---------------------------------------------------" +
+                "--------------------------------------------------------");
     }
     //Mostrar itens com estoque abaixo - Opção 5
-    public String itenEstoqueAbaixo() {
+    public void itensEstoqueAbaixo() {
         ArrayList<Item> estoque = getEstoque();
-        StringBuilder resultado = new StringBuilder();
-        if (estoque != null) {
+        boolean verificacao = false;
+        if (estoque != null){
             for (Item estoque_temp : estoque) {
                 if (estoque_temp.getQuantidadeMinima() > estoque_temp.getQuantidade()) {
-                    resultado.append(estoque_temp.getCodigo()+" || "+estoque_temp.getNomeProduto()+" || "+estoque_temp.getQuantidade()+" || "
-                            +estoque_temp.getQuantidadeMinima()).append("\n");
+                    verificacao = true;
                 }
             }
         }
-        return resultado.toString();
+        if (!verificacao)
+            System.out.println("Não tem produtos com estoque abaixo do mínimo.");
+        else {
+            System.out.printf("%-15s%-15s%-35s%-13s%-15s%-15s%n",
+                    "CÓDIGO", "CATEGORIA", "NOME DO PRODUTO",
+                    "VALOR", "QUANTIDADE", "ESTOQUE MINIMO");
+            System.out.println("----------------------------------------------" +
+                    "-------------------------------------------------------------");
+            for (Item estoque_temp : estoque) {
+                if (estoque_temp.getQuantidadeMinima() > estoque_temp.getQuantidade()) {
+                    System.out.printf("%-15d%-15s%-35s%-13.2f%-15d%-10d%n",
+                            estoque_temp.getCodigo(), estoque_temp.getCategoria().toString(),
+                            estoque_temp.getNomeProduto(), estoque_temp.getValor(),
+                            estoque_temp.getQuantidade(),
+                            estoque_temp.getQuantidadeMinima());
+                }
+            }
+            System.out.println("----------------------------------------------" +
+                    "-------------------------------------------------------------");
+        }
     }
+
     //Valida a existencia do arquivo no diretório
     private FileWriter getFileWriter() throws IOException {
         boolean arquivoExiste = new File(Arquivo).exists();
@@ -205,7 +232,7 @@ public class ItensCSV {
         //Abrir o escritor do arquivo e validar se existe
         FileWriter escreve = new FileWriter(Arquivo, StandardCharsets.ISO_8859_1, true);
         if (!arquivoExiste) {
-            escreve.write("Codigo;Categoria;Produto;Valor;Quantidade;QuantidadeMinima\n");
+            escreve.write("Codigo;classes.Categoria;Produto;Valor;Quantidade;QuantidadeMinima\n");
         }
         return escreve;
     }

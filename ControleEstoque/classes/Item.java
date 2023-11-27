@@ -1,3 +1,5 @@
+package classes;
+
 public class Item {
 
     private int codigo;
@@ -72,7 +74,7 @@ public class Item {
     @Override
     public String toString() {
         return  " \n" + "Codigo: " + codigo +
-                ", Categoria: " + categoria +
+                ", classes.Categoria: " + categoria +
                 ", nome do Produto: " + nomeProduto +
                 ", valor R$ " + valor +
                 ", Quantidade: " + quantidade +

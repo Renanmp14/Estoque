@@ -1,3 +1,5 @@
+package classes;
+
 import java.util.Scanner;
 public class ContaADM extends ItensCSV{
 
@@ -9,11 +11,11 @@ public class ContaADM extends ItensCSV{
     public void menuADM (){
         System.out.println("Bem Víndo ao Ambiente do Administrador");
         while (sair) {
-            System.out.println("Escolha sua operação:\n1. Adicionar Item no Estoque\n2. Remover item do Estoque\n3. Modificar quantidade do item\n4. Lista de Itens" +
+            System.out.println("Escolha sua operação:\n1. Adicionar classes.Item no Estoque\n2. Remover item do Estoque\n3. Modificar quantidade do item\n4. Lista de Itens" +
                     "\n5. Relatório de itens abaixo do estoque minímo\n6. Sair do menu");
             escolha = ler.nextInt();
             switch (escolha){
-                case 1: //Adiciona Item no Estoque
+                case 1: //Adiciona classes.Item no Estoque
                     System.out.println();
                     adicionaItensSolicitados();
                     System.out.println();
@@ -26,7 +28,7 @@ public class ContaADM extends ItensCSV{
                         System.out.println("\nCódigo não existente\n");
                     }
                     else{
-                        System.out.println("\nItem removido com sucesso\n");
+                        System.out.println("\nclasses.Item removido com sucesso\n");
                     }
                     break;
                 case 3: //Modificar quantidade do item na lista
@@ -40,30 +42,18 @@ public class ContaADM extends ItensCSV{
                         System.out.println("\nCódigo não existente\n");
                     }
                     else{
-                        System.out.println("\nItem modificado com sucesso\n");
+                        System.out.println("\nclasses.Item modificado com sucesso\n");
                     }
                     break;
                 case 4: //Mostrar Itens do Estoque
-                    String itensNoEstoque = mostrarItensEstoque();
                     System.out.println();
-                    if(itensNoEstoque.isEmpty()){
-                        System.out.println("Estoque sem itens");
-                    }
-                    else{
-                        System.out.println("*CÓDIGO* || *CATEGORIA* || *NOME DO PRODUTO* || *VALOR* ||*QUANTIDADE* || *ESTOQUE MINIMO*");
-                        System.out.println(itensNoEstoque);
-                    }
+                    mostrarItensEstoque();
+                    System.out.println();
                     break;
                 case 5: //Relatório de itens Faltantes do Estoque
-                    String resultado = itenEstoqueAbaixo();
                     System.out.println();
-                    if(resultado.isEmpty()){
-                        System.out.println("Não tem produtos com estoque abaixo do mínimo.");
-                    }
-                    else{
-                        System.out.println("*CÓDIGO* || *NOME DO PRODUTO* || *QUANTIDADE* || *ESTOQUE MINIMO*");
-                        System.out.println(resultado);
-                    }
+                    itensEstoqueAbaixo();
+                    System.out.println();
                     break;
                 case 6: // Finaliza operação
                     System.out.println();

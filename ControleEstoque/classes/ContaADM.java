@@ -1,7 +1,7 @@
 package classes;
 
 import java.util.Scanner;
-public class ContaADM extends ItensCSV{
+public class ContaADM extends ControleEstoque {
 
     private String login = "admin";
     private String senha = "admin";
@@ -36,7 +36,7 @@ public class ContaADM extends ItensCSV{
                     System.out.println("Informe o codigo do item para ser modificado: ");
                     int codigoModificacao = ler.nextInt();
                     System.out.println("Informe a quantidade desejada: ");
-                    System.out.println("*OBS: Números Positivos Somam e Números Negativos Subtraem*");
+                    System.out.println("*OBS: Números positivos somam e Números negativos subtraem*");
                     int quantidade = ler.nextInt();
                     if (modificarItem(codigoModificacao,quantidade) == false){
                         System.out.println("\nCódigo não existente\n");

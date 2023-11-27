@@ -5,7 +5,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class ItensCSV {
+public class ControleEstoque {
 
     //Caminho do arquivo
     private String Arquivo = "dados/Itens.csv";

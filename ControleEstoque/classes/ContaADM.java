@@ -1,3 +1,4 @@
+/*
 package classes;
 
 import java.util.Scanner;
@@ -78,3 +79,4 @@ public class ContaADM extends ControleEstoque {
         return senha;
     }
 }
+*/

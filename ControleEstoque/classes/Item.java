@@ -2,18 +2,11 @@ package classes;
 
 public class Item {
 
-    private int codigo;
+    private int codigo, quantidade, quantidadeMinima;
     private Categoria categoria;
     private String nomeProduto;
     private double valor;
-    private int quantidade;
-    private int quantidadeMinima;
 
-    public Item(){
-
-    }
-
-    // Método construtor
     public Item(int codigo, Categoria categoria, String produto, double valor, int quantidade, int quantidadeMinima) {
         this.codigo = codigo;
         this.categoria = categoria;
@@ -21,6 +14,9 @@ public class Item {
         this.valor = valor;
         this.quantidade = quantidade;
         this.quantidadeMinima = quantidadeMinima;
+    }
+
+    public Item() {
     }
 
     public String getNomeProduto() {

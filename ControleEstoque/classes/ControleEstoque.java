@@ -115,9 +115,8 @@ public class ControleEstoque {
                 item.setQuantidade(item.getQuantidade() + quantidade);
                 if (item.getQuantidade() <= 0)
                     item.setQuantidade(0);
-
+                return true;
             }
-            return true;
         }
         return false;
     }
